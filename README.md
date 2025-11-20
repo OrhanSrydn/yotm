@@ -114,11 +114,6 @@ dotnet run
 
 ### Visual Studio üzerinden çalıştıracaksanız solution properties kısmından multiple startup project kısmından yotm.API ve yotm.Web projelerini start ayarladığınızda aynı anda 2 projeyi çalıştırıp kullanmaya başlayabilirsiniz.
 
-### 5. Uygulamaya Erişin
-
-- **Web Uygulaması**: http://localhost:5000
-- **API**: http://localhost:5001
-- **Swagger**: http://localhost:5001/swagger
 
 ## 🐳 Docker ile Çalıştırma
 

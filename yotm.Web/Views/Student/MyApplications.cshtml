@@ -1,0 +1,159 @@
+﻿@model List<ApplicationViewModel>
+
+@{
+    ViewData["Title"] = "Başvurularım";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <h2 class="mb-0"><i class="bi bi-list-check"></i> Başvurularım</h2>
+            <a asp-action="Profile" asp-controller="Student" class="btn btn-outline-secondary">
+                <i class="bi bi-person-circle"></i> Profil
+            </a>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Courses" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Derslere Dön
+            </a>
+            <a asp-action="Logout" asp-controller="Auth" class="btn btn-outline-danger">
+                <i class="bi bi-box-arrow-right"></i> Çıkış
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @ViewBag.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Henüz başvuru yapmadınız.
+            <a asp-action="Courses" class="alert-link">Derslere göz atmak için tıklayın.</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Ders Kodu</th>
+                                        <th>Ders Adı</th>
+                                        <th>Bölüm</th>
+                                        <th>Başvuru Tarihi</th>
+                                        <th>Durum</th>
+                                        <th>İşlem Tarihi</th>
+                                        <th>Notlar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var app in Model.OrderByDescending(a => a.ApplicationDate))
+                                    {
+                                        <tr>
+                                            <td><strong>@app.CourseCode</strong></td>
+                                            <td>@app.CourseName</td>
+                                            <td><small class="text-muted">@app.Department</small></td>
+                                            <td>@app.ApplicationDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                            <td>
+                                                @if (app.StatusText == "Beklemede")
+                                                {
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="bi bi-clock"></i> @app.StatusText
+                                                    </span>
+                                                }
+                                                else if (app.StatusText == "Onaylandı")
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="bi bi-check-circle"></i> @app.StatusText
+                                                    </span>
+                                                }
+                                                else if (app.StatusText == "Reddedildi")
+                                                {
+                                                    <span class="badge bg-danger">
+                                                        <i class="bi bi-x-circle"></i> @app.StatusText
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (app.ProcessedDate.HasValue)
+                                                {
+                                                    @app.ProcessedDate.Value.ToString("dd.MM.yyyy HH:mm")
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrWhiteSpace(app.Notes))
+                                                {
+                                                    <small>@app.Notes</small>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Özet Bilgiler -->
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-warning">
+                                    <i class="bi bi-clock"></i> Beklemede
+                                </h5>
+                                <h2>@Model.Count(a => a.StatusText == "Beklemede")</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-success">
+                                    <i class="bi bi-check-circle"></i> Onaylandı
+                                </h5>
+                                <h2>@Model.Count(a => a.StatusText == "Onaylandı")</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-danger">
+                                    <i class="bi bi-x-circle"></i> Reddedildi
+                                </h5>
+                                <h2>@Model.Count(a => a.StatusText == "Reddedildi")</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

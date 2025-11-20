@@ -1,0 +1,33 @@
+# Build ve output klasörleri
+**/bin/
+**/obj/
+**/out/
+**/TestResults/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+**/.dockerignore
+**/docker-compose*
+**/Dockerfile*
+
+# Node modülleri
+**/node_modules/
+**/npm-debug.log
+
+# Diğer
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+**/.vscode/
+**/.idea/

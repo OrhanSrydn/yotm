@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "yotm.API\\yotm.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "yotm.Web\\yotm.Web.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

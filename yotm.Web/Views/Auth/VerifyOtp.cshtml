@@ -1,0 +1,72 @@
+﻿@model VerifyOtpViewModel
+
+@{
+    ViewData["Title"] = "Doğrulama Kodu";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h3 class="text-center mb-0">Doğrulama Kodu</h3>
+            </div>
+            <div class="card-body p-4">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                @if (TempData["OtpCode"] != null)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Development Modu:</strong> Doğrulama kodunuz: <strong>@TempData["OtpCode"]</strong>
+                    </div>
+                }
+
+                <p class="text-muted mb-4">
+                    <strong>@Model.PhoneNumber</strong> numaralı telefonunuza gönderilen 6 haneli kodu giriniz.
+                </p>
+
+                <form asp-action="VerifyOtp" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <input type="hidden" asp-for="PhoneNumber" />
+
+                    <div class="mb-3">
+                        <label asp-for="Code" class="form-label"></label>
+                        <input asp-for="Code" class="form-control form-control-lg text-center"
+                               placeholder="000000" maxlength="6" style="letter-spacing: 10px; font-size: 24px;" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle"></i> Doğrula ve Giriş Yap
+                        </button>
+                        <a asp-action="StudentLogin" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Geri Dön
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Otomatik focus ve sadece rakam girişi
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeInput = document.getElementById('Code');
+            codeInput.focus();
+
+            codeInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
+}

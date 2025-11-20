@@ -1,0 +1,51 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Öğrenci Girişi";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="text-center mb-0">Öğrenci Girişi</h3>
+            </div>
+            <div class="card-body p-4">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <p class="text-muted mb-4">Telefon numaranızı girerek giriş yapabilirsiniz. Size SMS ile doğrulama kodu gönderilecektir.</p>
+
+                <form asp-action="StudentLogin" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="form-label"></label>
+                        <input asp-for="PhoneNumber" class="form-control form-control-lg"
+                               placeholder="5551234567" maxlength="11" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        <small class="form-text text-muted">Örnek: 5551234567</small>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-phone"></i> Kod Gönder
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small class="text-muted">Admin misiniz? <a asp-action="AdminLogin">Admin Girişi</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

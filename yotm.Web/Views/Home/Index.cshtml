@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="text-center mt-5">
+    <img src="https://halic.edu.tr/wp-content/uploads/2025/06/25/halic_universitesi_logo.svg"
+         alt="Haliç Üniversitesi" style="max-width: 300px;" class="mb-4" />
+
+    <h1 class="display-4 mb-3">Yaz Okulu Ders Başvuru Sistemi</h1>
+    <p class="lead mb-5">Haliç Üniversitesi Yaz Okulu derslerine başvurunuzu online olarak yapabilirsiniz.</p>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-person-circle" style="font-size: 4rem; color: #0d6efd;"></i>
+                    <h3 class="card-title mt-3">Öğrenci Girişi</h3>
+                    <p class="card-text">Telefon numaranız ile giriş yaparak derslere başvurabilirsiniz.</p>
+                    <a asp-controller="Auth" asp-action="StudentLogin" class="btn btn-primary btn-lg">
+                        Öğrenci Girişi
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-shield-lock" style="font-size: 4rem; color: #dc3545;"></i>
+                    <h3 class="card-title mt-3">Admin Girişi</h3>
+                    <p class="card-text">Başvuruları yönetmek için admin paneline giriş yapın.</p>
+                    <a asp-controller="Auth" asp-action="AdminLogin" class="btn btn-danger btn-lg">
+                        Admin Girişi
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

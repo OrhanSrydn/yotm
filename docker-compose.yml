@@ -1,0 +1,70 @@
+services:
+  # SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: yotm-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=H4l1c3duTr!2024@Sql
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - yotm-network
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "H4l1c3duTr!2024@Sql", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API
+  api:
+    build:
+      context: .
+      dockerfile: yotm.API/Dockerfile
+    container_name: yotm-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=YotmDB;User Id=sa;Password=H4l1c3duTr!2024@Sql;TrustServerCertificate=True;MultipleActiveResultSets=true
+      - JwtSettings__SecretKey=h4L1c3dUtR!SecR3tK3y@2024#YotmJwtT0k3nS3cUr1tY&
+      - JwtSettings__Issuer=YotmAPI
+      - JwtSettings__Audience=YotmClient
+      - Cors__AllowedOrigins__0=http://localhost:5000
+      - Cors__AllowedOrigins__1=http://web:80
+    ports:
+      - "5001:80"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - yotm-network
+    restart: unless-stopped
+
+  # Web
+  web:
+    build:
+      context: .
+      dockerfile: yotm.Web/Dockerfile
+    container_name: yotm-web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ApiSettings__BaseUrl=http://api:80/api/
+    ports:
+      - "5000:80"
+    depends_on:
+      - api
+    networks:
+      - yotm-network
+    restart: unless-stopped
+
+networks:
+  yotm-network:
+    driver: bridge
+
+volumes:
+  sqlserver_data:
+    driver: local

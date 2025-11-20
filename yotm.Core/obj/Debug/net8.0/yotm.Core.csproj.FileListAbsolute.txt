@@ -1,0 +1,11 @@
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\bin\Debug\net8.0\yotm.Core.deps.json
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\bin\Debug\net8.0\yotm.Core.dll
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\bin\Debug\net8.0\yotm.Core.pdb
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\obj\Debug\net8.0\yotm.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\obj\Debug\net8.0\yotm.Core.AssemblyInfoInputs.cache
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\obj\Debug\net8.0\yotm.Core.AssemblyInfo.cs
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\obj\Debug\net8.0\yotm.Core.csproj.CoreCompileInputs.cache
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\obj\Debug\net8.0\yotm.Core.dll
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\obj\Debug\net8.0\refint\yotm.Core.dll
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\obj\Debug\net8.0\yotm.Core.pdb
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Core\obj\Debug\net8.0\ref\yotm.Core.dll

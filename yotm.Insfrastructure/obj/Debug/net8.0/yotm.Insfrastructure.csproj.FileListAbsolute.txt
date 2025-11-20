@@ -1,0 +1,17 @@
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\bin\Debug\net8.0\yotm.Insfrastructure.deps.json
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\bin\Debug\net8.0\yotm.Insfrastructure.runtimeconfig.json
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\bin\Debug\net8.0\yotm.Insfrastructure.dll
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\bin\Debug\net8.0\yotm.Insfrastructure.pdb
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\bin\Debug\net8.0\yotm.Core.dll
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\bin\Debug\net8.0\yotm.Core.pdb
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Insfrastructure.csproj.AssemblyReference.cache
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Insfrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Insfrastructure.AssemblyInfoInputs.cache
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Insfrastructure.AssemblyInfo.cs
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Insfrastructure.csproj.CoreCompileInputs.cache
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Ins.AF1C13D0.Up2Date
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Insfrastructure.dll
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\refint\yotm.Insfrastructure.dll
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Insfrastructure.pdb
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\yotm.Insfrastructure.genruntimeconfig.cache
+C:\Users\OrhanSrydn\source\repos\yotm\yotm.Insfrastructure\obj\Debug\net8.0\ref\yotm.Insfrastructure.dll

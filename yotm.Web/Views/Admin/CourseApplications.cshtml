@@ -1,0 +1,332 @@
+﻿@model List<AdminApplicationViewModel>
+
+@{
+    ViewData["Title"] = "Başvuru Yönetimi";
+    var course = ViewBag.Course as CourseViewModel;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-file-earmark-text"></i> Başvuru Yönetimi</h2>
+        <a asp-action="Dashboard" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Dashboard'a Dön
+        </a>
+    </div>
+
+    @if (course != null)
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Ders Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Ders Kodu:</strong> @course.Code</p>
+                        <p><strong>Ders Adı:</strong> @course.Name</p>
+                        <p><strong>Bölüm:</strong> @course.Department</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Fakülte:</strong> @course.Faculty</p>
+                        <p><strong>Öğretim Görevlisi:</strong> @course.Instructor</p>
+                        <p>
+                            <strong>Kontenjan Durumu:</strong>
+                            <span class="badge @(course.IsQuotaFull ? "bg-danger" : "bg-success")">
+                                @course.ApprovedCount / @course.Quota
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @ViewBag.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Bu derse henüz başvuru yapılmamış.
+        </div>
+    }
+    else
+    {
+        <!-- Başvuru Filtreleme -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="btn-group" role="group" aria-label="Durum Filtresi">
+                    <button type="button" class="btn btn-outline-secondary filter-btn active" data-filter="all">
+                        Tümü (@Model.Count())
+                    </button>
+                    <button type="button" class="btn btn-outline-warning filter-btn" data-filter="Pending">
+                        Beklemede (@Model.Count(a => a.StatusText == "Beklemede"))
+                    </button>
+                    <button type="button" class="btn btn-outline-success filter-btn" data-filter="Approved">
+                        Onaylı (@Model.Count(a => a.StatusText == "Onaylandı"))
+                    </button>
+                    <button type="button" class="btn btn-outline-danger filter-btn" data-filter="Rejected">
+                        Reddedilen (@Model.Count(a => a.StatusText == "Reddedildi"))
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="applicationsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Öğrenci Adı</th>
+                                <th>Telefon</th>
+                                <th>Öğrenci No</th>
+                                <th>Bölüm</th>
+                                <th>Başvuru Tarihi</th>
+                                <th>Durum</th>
+                                <th>İşlem Tarihi</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var app in Model.OrderBy(a => a.ApplicationDate))
+                            {
+                                <tr data-status="@app.StatusText">
+                                    <td><strong>@app.StudentName</strong></td>
+                                    <td>@app.PhoneNumber</td>
+                                    <td>@(app.StudentNumber ?? "-")</td>
+                                    <td><small class="text-muted">@(app.Department ?? "-")</small></td>
+                                    <td>@app.ApplicationDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>
+                                        @if (app.StatusText == "Beklemede")
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-clock"></i> @app.StatusText
+                                            </span>
+                                        }
+                                        else if (app.StatusText == "Onaylandı")
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle"></i> @app.StatusText
+                                            </span>
+                                        }
+                                        else if (app.StatusText == "Reddedildi")
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle"></i> @app.StatusText
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (app.ProcessedDate.HasValue)
+                                        {
+                                            <small>@app.ProcessedDate.Value.ToString("dd.MM.yyyy HH:mm")</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (app.StatusText == "Beklemede")
+                                        {
+                                            <button class="btn btn-sm btn-success approve-btn" data-app-id="@app.Id" data-student-name="@app.StudentName">
+                                                <i class="bi bi-check-circle"></i> Onayla
+                                            </button>
+                                            <button class="btn btn-sm btn-danger reject-btn" data-app-id="@app.Id" data-student-name="@app.StudentName">
+                                                <i class="bi bi-x-circle"></i> Reddet
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <small class="text-muted">İşlem yapıldı</small>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Onay Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="approveModalLabel">Başvuruyu Onayla</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <strong id="approveStudentName"></strong> adlı öğrencinin başvurusunu onaylamak istediğinizden emin misiniz?
+                </p>
+                <div class="mb-3">
+                    <label for="approveNotes" class="form-label">Not (Opsiyonel):</label>
+                    <textarea class="form-control" id="approveNotes" rows="3" placeholder="Öğrenciye iletilecek not..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-success" id="confirmApproveBtn">
+                    <i class="bi bi-check-circle"></i> Evet, Onayla
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reddetme Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="rejectModalLabel">Başvuruyu Reddet</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <strong id="rejectStudentName"></strong> adlı öğrencinin başvurusunu reddetmek istediğinizden emin misiniz?
+                </p>
+                <div class="mb-3">
+                    <label for="rejectNotes" class="form-label">Ret Nedeni:</label>
+                    <textarea class="form-control" id="rejectNotes" rows="3" placeholder="Öğrenciye iletilecek ret nedeni..." required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-danger" id="confirmRejectBtn">
+                    <i class="bi bi-x-circle"></i> Evet, Reddet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let selectedApplicationId = 0;
+
+        // Filtreleme
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.getAttribute('data-filter');
+                const rows = document.querySelectorAll('#applicationsTable tbody tr');
+
+                rows.forEach(row => {
+                    if (filter === 'all') {
+                        row.style.display = '';
+                    } else {
+                        const status = row.getAttribute('data-status');
+                        if ((filter === 'Pending' && status === 'Beklemede') ||
+                            (filter === 'Approved' && status === 'Onaylandı') ||
+                            (filter === 'Rejected' && status === 'Reddedildi')) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // Onayla butonu
+        document.querySelectorAll('.approve-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectedApplicationId = this.getAttribute('data-app-id');
+                const studentName = this.getAttribute('data-student-name');
+
+                document.getElementById('approveStudentName').textContent = studentName;
+                document.getElementById('approveNotes').value = '';
+
+                const modal = new bootstrap.Modal(document.getElementById('approveModal'));
+                modal.show();
+            });
+        });
+
+        // Reddet butonu
+        document.querySelectorAll('.reject-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectedApplicationId = this.getAttribute('data-app-id');
+                const studentName = this.getAttribute('data-student-name');
+
+                document.getElementById('rejectStudentName').textContent = studentName;
+                document.getElementById('rejectNotes').value = '';
+
+                const modal = new bootstrap.Modal(document.getElementById('rejectModal'));
+                modal.show();
+            });
+        });
+
+        // Onaylama işlemi
+        document.getElementById('confirmApproveBtn').addEventListener('click', async function() {
+            const notes = document.getElementById('approveNotes').value;
+            await updateStatus('Approved', notes);
+        });
+
+        // Reddetme işlemi
+        document.getElementById('confirmRejectBtn').addEventListener('click', async function() {
+            const notes = document.getElementById('rejectNotes').value;
+
+            if (!notes.trim()) {
+                alert('Lütfen ret nedeni giriniz.');
+                return;
+            }
+
+            await updateStatus('Rejected', notes);
+        });
+
+        // Durum güncelleme fonksiyonu
+        async function updateStatus(status, notes) {
+            try {
+                const response = await fetch('@Url.Action("UpdateApplicationStatus", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        applicationId: selectedApplicationId,
+                        status: status,
+                        notes: notes
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Modal'ları kapat
+                    const approveModal = bootstrap.Modal.getInstance(document.getElementById('approveModal'));
+                    const rejectModal = bootstrap.Modal.getInstance(document.getElementById('rejectModal'));
+                    if (approveModal) approveModal.hide();
+                    if (rejectModal) rejectModal.hide();
+
+                    // Sayfayı yenile
+                    location.reload();
+                } else {
+                    alert('Hata: ' + result.message);
+                }
+            } catch (error) {
+                alert('Bir hata oluştu: ' + error.message);
+            }
+        }
+    </script>
+}

@@ -93,7 +93,6 @@ cd yotm
 
 ```bash
 cd yotm.API
-dotnet ef migrations add InitialMigration --project ../yotm.Insfrastructure
 dotnet ef database update --project ../yotm.Insfrastructure
 ```
 
